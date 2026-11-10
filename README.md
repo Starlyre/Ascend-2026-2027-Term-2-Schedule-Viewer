@@ -88,11 +88,12 @@ java Server
 | 9 | **Saraza** | 16.0 | Wed (all day), Tue afternoon, Sat (all day) | `SARAZA SCHED.jpg` |
 | 10 | **Villanueva** | 18.0 | Wed (all day), Mon 9-1 PM, Sat (all day) | `Villanueva Sched.jpg` |
 | 11 | **Tuazon** | 8.0 | Wed (all day), Tue (all day), Sat (all day) | `Tuazon.jpg` |
+| 12 | **Vicente** | 17.0 | Wed (before 10 AM, after 12:40 PM), Thu/Mon afternoon | `Vicente.jpeg` |
 
 ### 💡 Key Schedule Insights for Organization Planning:
-- 🌟 **Golden Day (Wednesday)**: **100% of all 11 officers are completely free all day (7:00 AM – 8:00 PM)**! Ideal for ASCEND General Assemblies, major workshops, and executive committee sessions.
-- 📅 **Secondary Window (Saturday)**: **100% free before 11:00 AM and after 3:00 PM for all 11 officers** (only Manuson has class from 11:00 AM – 3:00 PM).
-- 🌙 **Evening Window (Weekdays 7:00 PM – 8:00 PM)**: All 11 officers are finished with classes every single day by 7:00 PM.
+- 🌟 **Golden Day (Wednesday)**: **100% of all 12 officers are free from 12:40 PM to 8:00 PM (7+ continuous hours)**, and 7:00 AM to 10:00 AM (11 of 12 officers free all day)! Ideal for ASCEND General Assemblies, major workshops, and executive committee sessions.
+- 📅 **Weekend Window (Saturday)**: **10 out of 12 officers free all day** (and 11/12 free before 11:00 AM).
+- 🌙 **Evening Window (Weekdays 7:00 PM – 8:00 PM)**: All 12 officers are finished with classes every single day by 7:00 PM.
 
 ---
 

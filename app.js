@@ -262,12 +262,12 @@ function renderMeetingFinder() {
         <div class="rec-left">
           <div class="rec-star-badge">🌟</div>
           <div>
-            <div class="rec-title">Optimal Organization Window: Wednesday (All Day)</div>
-            <div class="rec-desc">Zero class conflicts for all ${count} officers! Recommended for General Assemblies, Executive Meetings, and Organization Workshops.</div>
+            <div class="rec-title">Optimal Organization Day: Wednesday (12:40 PM – 8:00 PM: 100% Free)</div>
+            <div class="rec-desc">Zero class conflicts for all officers in the afternoon & evening (plus 11/12 officers free all day)! Recommended for General Assemblies, Executive Meetings, and Workshops.</div>
           </div>
         </div>
-        <button class="btn-primary" onclick="copySlotText('Wednesday', '07:00 AM - 08:00 PM', 'All Day', ${count}, ${count})">
-          📋 Copy Wednesday Slot
+        <button class="btn-primary" onclick="copySlotText('Wednesday', '12:40 PM - 08:00 PM', '7+ Hours', ${count}, ${count})">
+          📋 Copy Wednesday Window
         </button>
       `;
     } else {
@@ -643,8 +643,8 @@ function setupEventListeners() {
   const juniorBtn = document.getElementById('btnSelectJuniors');
   if (juniorBtn) {
     juniorBtn.addEventListener('click', () => {
-      // Cajis, Dandan, Diaz, Corpuz, Manuson, Saraza, Villanueva
-      state.selectedOfficers = ['cajis', 'dandan', 'diaz', 'corpuz', 'manuson', 'saraza', 'villanueva'];
+      // Cajis, Dandan, Diaz, Corpuz, Manuson, Saraza, Villanueva, Vicente
+      state.selectedOfficers = ['cajis', 'dandan', 'diaz', 'corpuz', 'manuson', 'saraza', 'villanueva', 'vicente'];
       renderOfficerSelectorChips();
       renderMeetingFinder();
       renderHeatmap();
