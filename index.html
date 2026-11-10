@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASCEND NU Fairview • Officer Schedule Availability Checker</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+</head>
+<body data-theme="dark">
+  <div class="app-container">
+
+    <!-- Header Section -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="brand-section">
+          <div class="brand-logo-badge">
+            <span class="badge-icon">⚡</span>
+            <span class="badge-text">ASCEND</span>
+          </div>
+          <div class="brand-info">
+            <h1>Organization ASCEND</h1>
+            <p>Academic Society of Computer Engineering Discipline • National University Fairview</p>
+          </div>
+        </div>
+
+        <div class="header-meta">
+          <span class="pill-badge gold">AY 2026–2027 • Term 2</span>
+          <span class="pill-badge cyan">BS Computer Engineering</span>
+          <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Theme">
+            🌙 Dark
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Stats Row -->
+      <div class="header-stats-row">
+        <div class="stat-item">
+          <div class="stat-icon">👥</div>
+          <div class="stat-content">
+            <div class="stat-label">Officers Enrolled</div>
+            <div class="stat-val" id="totalOfficersStat">11 Leaders</div>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon green">🌟</div>
+          <div class="stat-content">
+            <div class="stat-label">Golden Meeting Day</div>
+            <div class="stat-val">Wednesday (100% Free)</div>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon gold">📅</div>
+          <div class="stat-content">
+            <div class="stat-label">Weekend Window</div>
+            <div class="stat-val">Saturday (90% Free)</div>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon">⏰</div>
+          <div class="stat-content">
+            <div class="stat-label">Real-Time Status</div>
+            <div class="stat-val" id="liveStatusVal">Checking...</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Officer Filter / Selector Bar -->
+    <section class="officer-selector-card">
+      <div class="selector-header">
+        <div class="selector-title">
+          <span>👥 Include Officers in Availability Check:</span>
+          <span class="pill-badge cyan" id="selectedCountLabel">10 / 10 Selected</span>
+        </div>
+        <div class="selector-actions">
+          <button class="btn-chip" id="btnSelectAllOfficers">Select All</button>
+          <button class="btn-chip" id="btnSelectSeniors">4th Year (4)</button>
+          <button class="btn-chip" id="btnSelectJuniors">2nd/3rd Year (7)</button>
+          <button class="btn-chip" id="btnClearAllOfficers">Clear</button>
+        </div>
+      </div>
+      <div class="officer-chips-grid" id="officerChipsContainer">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-target="meeting-finder">
+        🎯 Best Meeting Times
+      </button>
+      <button class="tab-btn" data-target="heatmap-view">
+        🗺️ Availability Heatmap
+      </button>
+      <button class="tab-btn" data-target="instant-checker">
+        ⚡ Instant Checker ("Who's Free Now?")
+      </button>
+      <button class="tab-btn" data-target="officer-profiles">
+        👤 Individual Timetables
+      </button>
+      <button class="tab-btn" data-target="compare-view">
+        ⚖️ Side-by-Side Compare
+      </button>
+      <button class="tab-btn" data-target="about-export">
+        ℹ️ Export & Info
+      </button>
+    </nav>
+
+    <!-- TAB 1: Meeting Finder -->
+    <section class="tab-panel active" id="meeting-finder">
+      <div class="panel-header-box">
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="filterDuration">Meeting Duration</label>
+            <select class="filter-control" id="filterDuration">
+              <option value="30">30 Minutes (Quick Huddle)</option>
+              <option value="60" selected>1 Hour (Standard Meeting)</option>
+              <option value="90">1.5 Hours (Workshop / Discussion)</option>
+              <option value="120">2 Hours (General Assembly)</option>
+              <option value="180">3 Hours (Major Event)</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="filterDay">Filter by Day</label>
+            <select class="filter-control" id="filterDay">
+              <option value="all" selected>All Days (Mon - Sat)</option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday (Free Day!)</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="filterWindow">Time Window</label>
+            <select class="filter-control" id="filterWindow">
+              <option value="all" selected>Any Time (7:00 AM - 8:00 PM)</option>
+              <option value="morning">Morning (7:00 AM - 12:00 PM)</option>
+              <option value="afternoon">Afternoon (12:00 PM - 5:00 PM)</option>
+              <option value="evening">Evening (5:00 PM - 8:00 PM)</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="filterThreshold">Availability Requirement</label>
+            <select class="filter-control" id="filterThreshold">
+              <option value="1.0" selected>100% Free (Zero Conflicts)</option>
+              <option value="0.9">90%+ Free (At most 1 conflict)</option>
+              <option value="0.8">80%+ Free (At most 2 conflicts)</option>
+              <option value="0.5">50%+ Free (Majority Free)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Recommendation Banner -->
+      <div id="topRecommendationBanner" class="meeting-finder-recommendation" style="display: none;"></div>
+
+      <!-- Dynamic Slots Grid -->
+      <div class="slots-grid" id="meetingSlotsContainer">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
+
+    <!-- TAB 2: Availability Heatmap -->
+    <section class="tab-panel" id="heatmap-view">
+      <div class="panel-header-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h3 style="font-size: 1.1rem; font-weight: 700;">Group Availability Heatmap Matrix</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">
+              Overview of how many selected officers are free at each hour of the week. Click any cell to view the exact officer breakdown.
+            </p>
+          </div>
+          <div class="heatmap-legend">
+            <div class="legend-item"><div class="legend-box heat-level-5"></div> 100% Free</div>
+            <div class="legend-item"><div class="legend-box heat-level-4"></div> 80-99% Free</div>
+            <div class="legend-item"><div class="legend-box heat-level-3"></div> 60-79% Free</div>
+            <div class="legend-item"><div class="legend-box heat-level-2"></div> 40-59% Free</div>
+            <div class="legend-item"><div class="legend-box heat-level-1"></div> 1-39% Free</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="heatmap-container" id="heatmapTableContainer">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
+
+    <!-- TAB 3: Instant Checker -->
+    <section class="tab-panel" id="instant-checker">
+      <div class="instant-checker-box">
+        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.25rem;">⚡ Instant Schedule Lookup</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          Find out who is free and who is in class at any exact time of the week.
+        </p>
+
+        <div class="filter-row" style="align-items: flex-end;">
+          <div class="filter-group">
+            <label for="instantDaySelect">Select Day</label>
+            <select class="filter-control" id="instantDaySelect">
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="instantTimeInput">Select Time</label>
+            <input type="time" class="filter-control" id="instantTimeInput" value="11:00" step="900">
+          </div>
+
+          <button class="btn-primary" id="btnUseCurrentTime">
+            ⏱️ Use Current Time
+          </button>
+        </div>
+
+        <div class="instant-result-grid">
+          <div class="result-card free">
+            <div class="result-card-header">
+              <span class="result-card-title" style="color: #34d399;">
+                🟢 Available Officers
+              </span>
+              <span class="pill-badge" id="instantFreeCount" style="background: var(--status-free-bg); color: #34d399;">
+                0 Free
+              </span>
+            </div>
+            <div class="result-officers-list" id="instantFreeList"></div>
+          </div>
+
+          <div class="result-card busy">
+            <div class="result-card-header">
+              <span class="result-card-title" style="color: #f87171;">
+                🔴 In Class / Busy
+              </span>
+              <span class="pill-badge" id="instantBusyCount" style="background: var(--status-busy-bg); color: #f87171;">
+                0 In Class
+              </span>
+            </div>
+            <div class="result-officers-list" id="instantBusyList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: Individual Officer Schedules -->
+    <section class="tab-panel" id="officer-profiles">
+      <div class="panel-header-box">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <label for="officerProfileSelect" style="font-weight: 700; font-size: 0.9rem;">Select Officer:</label>
+            <select class="filter-control" id="officerProfileSelect" style="min-width: 220px; font-weight: 600;">
+              <!-- Options populated by app.js -->
+            </select>
+          </div>
+          <button class="btn-outline" onclick="window.print()">
+            🖨️ Print Officer Timetable
+          </button>
+        </div>
+      </div>
+
+      <div id="officerProfileView">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
+
+    <!-- TAB 5: Side-by-Side Compare -->
+    <section class="tab-panel" id="compare-view">
+      <div class="panel-header-box">
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="compareSelect1">First Officer</label>
+            <select class="filter-control" id="compareSelect1"></select>
+          </div>
+          <div class="filter-group">
+            <label for="compareSelect2">Second Officer</label>
+            <select class="filter-control" id="compareSelect2"></select>
+          </div>
+        </div>
+      </div>
+
+      <div id="comparisonContainer">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
+
+    <!-- TAB 6: About & Export -->
+    <section class="tab-panel" id="about-export">
+      <div class="panel-header-box">
+        <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--cyan-accent);">
+          Organization ASCEND • NU Fairview
+        </h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem;">
+          <strong>Academic Society of Computer Engineering Discipline (ASCEND)</strong> is the premier student organization of BS Computer Engineering students at National University Fairview.
+          This Schedule Availability Checker was designed to streamline meeting planning, project collaboration, event scheduling, and officer task management for Term 2, Academic Year 2026–2027.
+        </p>
+
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <button class="btn-primary" onclick="exportSchedulesJSON()">
+            💾 Export Database (JSON)
+          </button>
+          <button class="btn-outline" onclick="window.print()">
+            🖨️ Print Availability Report (PDF)
+          </button>
+        </div>
+      </div>
+
+      <div class="schedule-table-wrap">
+        <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); font-weight: 700;">
+          ASCEND Officers Roster (11 Officers Enrolled)
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Officer Name</th>
+              <th>Program</th>
+              <th>Term</th>
+              <th>Total Units</th>
+              <th>Schedule Slip</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Albano</strong></td>
+              <td>BS Computer Engineering</td>
+              <td>2nd Term • S.Y. 2026-2027</td>
+              <td>11.0 Units</td>
+              <td><a href="#" onclick="viewOriginalImage('ALBANO SCHED.jpg', 'Albano'); return false;" style="color: var(--cyan-accent);">View Slip</a></td>
+            </tr>
+            <tr>
+              <td><strong>Cajis</strong></td>
+              <td>BS Computer Engineering</td>
+              <td>2nd Term • S.Y. 2026-2027</td>
+              <td>15.0 Units</td>
+              <td><a href="#" onclick="viewOriginalImage('Cajis, Dandan, Diaz Sched.jpg', 'Cajis'); return false;" style="color: var(--cyan-accent);">View Slip</a></td>
+            </tr>
+            <tr>
+              <td><strong>Dandan</strong></td>
+              <td>BS Computer Engineering</td>
+              <td>2nd Term • S.Y. 2026-2027</td>
+              <td>15.0 Units</td>
+              <td><a href="#" onclick="viewOriginalImage('Cajis, Dandan, Diaz Sched.jpg', 'Dandan'); return false;" style="color: var(--cyan-accent);">View Slip</a></td>
+            </tr>
+            <tr>
+              <td><strong>Diaz</strong></td>
+              <td>BS Computer Engineering</td>
+              <td>2nd Term • S.Y. 2026-2027</td>
+              <td>15.0 Units</td>
+              <td><a href="#" onclick="viewOriginalImage('Cajis, Dandan, Diaz Sched.jpg', 'Diaz'); return false;" style="color: var(--cyan-accent);">View Slip</a></td>
+            </tr>
+            <tr>
+              <td><strong>Carorocan</strong></td>
+              <td>BS Computer Engineering</td>
+              <td>2nd Term • S.Y. 2026-2027</td>
+              <td>8.0 Units</td>
+              <td><a href="#" onclick="viewOriginalImage('Carorocan, Taneo Sched.jpg', 'Carorocan'); return false;" style="color: var(--cyan-accent);">View Slip</a></td>
+            </tr>
+            <tr>
+              <td><strong>Taneo</strong></td>
+              <td>BS Computer Engineering</td>
+              <td>2nd Term • S.Y. 2026-2027</td>
+              <td>8.0 Units</td>
+              <td><a href="#" onclick="viewOriginalImage('Carorocan, Taneo Sched.jpg', 'Taneo'); return false;" style="color: var(--cyan-accent);">View Slip</a></td>
+            </tr>
+            <tr>
+              <td><strong>Corpuz</strong></td>
+              <td>BS Computer Engineering</td>
+              <td>2nd Term • S.Y. 2026-2027</td>
+              <td>16.0 Units</td>
+              <td><a href="#" onclick="viewOriginalImage('Corpuz Sched.jpg', 'Corpuz'); return false;" style="color: var(--cyan-accent);">View Slip</a></td>
+            </tr>
+            <tr>
+              <td><strong>Manuson</strong></td>
+              <td>BS Computer Engineering</td>
+              <td>2nd Term • S.Y. 2026-2027</td>
+              <td>19.0 Units</td>
+              <td><a href="#" onclick="viewOriginalImage('Manuson Sched.jpg', 'Manuson'); return false;" style="color: var(--cyan-accent);">View Slip</a></td>
+            </tr>
+            <tr>
+              <td><strong>Saraza</strong></td>
+              <td>BS Computer Engineering</td>
+              <td>2nd Term • S.Y. 2026-2027</td>
+              <td>16.0 Units</td>
+              <td><a href="#" onclick="viewOriginalImage('SARAZA SCHED.jpg', 'Saraza'); return false;" style="color: var(--cyan-accent);">View Slip</a></td>
+            </tr>
+            <tr>
+              <td><strong>Villanueva</strong></td>
+              <td>BS Computer Engineering</td>
+              <td>2nd Term • S.Y. 2026-2027</td>
+              <td>18.0 Units</td>
+              <td><a href="#" onclick="viewOriginalImage('Villanueva Sched.jpg', 'Villanueva'); return false;" style="color: var(--cyan-accent);">View Slip</a></td>
+            </tr>
+            <tr>
+              <td><strong>Tuazon</strong></td>
+              <td>BS Computer Engineering</td>
+              <td>2nd Term • S.Y. 2026-2027</td>
+              <td>8.0 Units</td>
+              <td><a href="#" onclick="viewOriginalImage('Tuazon.jpg', 'Tuazon'); return false;" style="color: var(--cyan-accent);">View Slip</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Reusable App Modal -->
+  <div class="modal-overlay" id="appModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modalTitle">Details</h3>
+        <button class="modal-close-btn modal-close-trigger">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts: Web Trio Data + App -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
